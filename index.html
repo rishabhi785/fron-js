@@ -1,33 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Fingerprint Generator</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Device Verification</title>
 </head>
 <body>
-    <h2>Generate Fingerprint</h2>
-    <button id="generateBtn">Generate & Send</button>
+  <p>Verifying device, please wait...</p>
 
-    <script>
-        // simple browser fingerprint (you can replace this with a library like FingerprintJS for better result)
-        function generateFingerprint(){
-            const navigatorInfo = navigator.userAgent;
-            const screenInfo   = screen.width + "x" + screen.height;
-            const timezone     = Intl.DateTimeFormat().resolvedOptions().timeZone;
-            return btoa(navigatorInfo + "|" + screenInfo + "|" + timezone);
-        }
+  <script>
+      // simple browser fingerprint (can be replaced with FingerprintJS)
+      function generateFingerprint(){
+          const userAgent = navigator.userAgent;
+          const screenInfo = screen.width + "x" + screen.height;
+          const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+          return btoa(userAgent + "|" + screenInfo + "|" + timezone);
+      }
 
-        const tg = window.Telegram.WebApp;
+      const tg = window.Telegram.WebApp;
 
-        document.getElementById("generateBtn").addEventListener("click", function () {
-            const fingerprint = generateFingerprint();
-            // send data to bot
-            tg.sendData(fingerprint);
-
-            // optional: close WebApp automatically
-            tg.close();
-        });
-    </script>
+      window.onload = () => {
+          const fingerprint = generateFingerprint();
+          tg.sendData(fingerprint);
+          tg.close(); // close the WebApp
+      }
+  </script>
 </body>
 </html>
